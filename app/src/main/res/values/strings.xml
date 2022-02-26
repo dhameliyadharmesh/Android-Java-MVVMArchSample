@@ -3,4 +3,9 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="log_in">LOG IN</string>
+
+    <string name="email_required">Email required</string>
+    <string name="email_invalid">Email invalid</string>
+    <string name="password_required">Password required</string>
+    <string name="password_length_invalid">Password must have 6 characters</string>
 </resources>
