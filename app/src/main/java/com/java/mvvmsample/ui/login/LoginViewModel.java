@@ -1,4 +1,4 @@
-package com.java.mvvmsample.ui;
+package com.java.mvvmsample.ui.login;
 
 import android.view.View;
 

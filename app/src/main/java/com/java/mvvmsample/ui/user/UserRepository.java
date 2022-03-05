@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
-import com.java.mvvmsample.ui.LoginModel;
+import com.java.mvvmsample.ui.login.LoginModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;

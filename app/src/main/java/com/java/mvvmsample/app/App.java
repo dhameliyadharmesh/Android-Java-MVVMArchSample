@@ -34,7 +34,7 @@ public class App extends Application {
 
     private void initRetrofitInstance() {
         // Add your domain or base url here
-        retrofit = RetrofitClient.getRetrofit("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        retrofit = RetrofitClient.getRetrofit("XXXXXXXXXXXXX");
     }
 
 
