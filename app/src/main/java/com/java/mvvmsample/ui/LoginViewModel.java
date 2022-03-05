@@ -1,5 +1,7 @@
 package com.java.mvvmsample.ui;
 
+import android.view.View;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.common.BaseViewModel;
@@ -9,6 +11,8 @@ import com.google.gson.JsonObject;
 import com.java.mvvmsample.R;
 import com.java.mvvmsample.ui.user.UserRepository;
 
+import timber.log.Timber;
+
 /**
  * @Authoer Dharmesh
  * @Date 24-02-2022
@@ -17,55 +21,107 @@ import com.java.mvvmsample.ui.user.UserRepository;
  **/
 public class LoginViewModel extends BaseViewModel {
 
-    public String EmailAddress;
-    public String Password;
+    public String strEmail;
+    public String strPassword;
 
-    public MutableLiveData<Integer> ErrorEmailAddress = new MutableLiveData<>();
-    public MutableLiveData<Integer> ErrorPassword = new MutableLiveData<>();
-    public MutableLiveData<JsonObject> loginCallObservable = new MutableLiveData<>();
+    private MutableLiveData<Integer> errEmailData;
+    private MutableLiveData<Integer> errPasswordData;
 
-    private MutableLiveData<LoginModel> userMutableLiveData;
-    private UserRepository userRepository;
+    private MutableLiveData<JsonObject> loginApiData;
+    private MutableLiveData<LoginModel> formData;
+    private final UserRepository userRepository;
 
-    public MutableLiveData<LoginModel> getUser() {
-        if (userMutableLiveData == null) {
-            userMutableLiveData = new MutableLiveData<>();
-        }
-        return userMutableLiveData;
+    // View Observables
+    private MutableLiveData<Integer> loginBtnData;
+    private MutableLiveData<Boolean> fullNestedData;
+    private MutableLiveData<Integer> progBarData;
+
+    public LoginViewModel(UserRepository userRepository) {
+        this.userRepository = userRepository;
+
+        loginBtnData = new MutableLiveData<>();
+        progBarData = new MutableLiveData<>(View.GONE);
+        fullNestedData = new MutableLiveData<>(true);
     }
 
-    public MutableLiveData<JsonObject> getLoginCallObservable(){
-        if (loginCallObservable == null) {
-            loginCallObservable = new MutableLiveData<>();
-        }
-        return loginCallObservable;
+    public MutableLiveData<Integer> getErrEmailData() {
+        return errEmailData = (errEmailData == null) ? new MutableLiveData<>() : errEmailData;
     }
 
-    public void validateForm() {
-        LoginModel loginModel = new LoginModel(EmailAddress, Password);
-        ErrorEmailAddress.postValue(null);
-        ErrorPassword.postValue(null);
+    public MutableLiveData<Integer> getErrPasswordData() {
+        return errPasswordData = (errPasswordData == null) ? new MutableLiveData<>() : errPasswordData;
+    }
 
-        EmailValidator emailValidator = new EmailValidator(loginModel.getStrEmailAddress());
+    public MutableLiveData<JsonObject> getLoginApiData() {
+        return loginApiData = (loginApiData == null) ? new MutableLiveData<>() : loginApiData;
+    }
+
+    public MutableLiveData<LoginModel> getFormData() {
+        return formData = (formData == null) ? new MutableLiveData<LoginModel>() : formData;
+    }
+
+    public MutableLiveData<Integer> getLoginBtnData() {
+        return loginBtnData = (loginBtnData == null) ? new MutableLiveData<>() : loginBtnData;
+    }
+
+    public MutableLiveData<Boolean> getFullNestedData() {
+        return fullNestedData = (fullNestedData == null) ? new MutableLiveData<>() : fullNestedData;
+    }
+
+    public MutableLiveData<Integer> getProgBarData() {
+        return progBarData;
+    }
+
+    public void performValidation() {
+
+        errEmailData.setValue(null);
+        errPasswordData.setValue(null);
+
+        EmailValidator emailValidator = new EmailValidator(strEmail);
         if (emailValidator.isEmailEmpty()) {
-            ErrorEmailAddress.postValue(R.string.email_required);
+            errEmailData.setValue(R.string.email_required);
         } else if (emailValidator.isEmailInValid()) {
-            ErrorEmailAddress.postValue(R.string.email_invalid);
+            errEmailData.setValue(R.string.email_invalid);
         } else {
-            PasswordValidator passwordValidator = new PasswordValidator(loginModel.getStrPassword());
+            PasswordValidator passwordValidator = new PasswordValidator(strPassword);
             if (passwordValidator.isPasswordEmpty()) {
-                ErrorPassword.postValue(R.string.password_required);
+                errPasswordData.setValue(R.string.password_required);
             } else {
-                userMutableLiveData.postValue(loginModel);
+                LoginModel loginModel = new LoginModel(strEmail, strPassword);
+                setFullNestedData(false);
+                setLoginBtnData(View.GONE);
+                setProgBarData(View.VISIBLE);
+                formData.setValue(loginModel);
             }
         }
     }
 
-    public void login(LoginModel loginModel){
-        userRepository.loginUser(loginCallObservable,loginModel);
+    private void setLoginBtnData(int visibility) {
+        loginBtnData.setValue(visibility);
     }
 
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private void setFullNestedData(boolean isEnabled) {
+        fullNestedData.setValue(isEnabled);
+    }
+
+    private void setProgBarData(int visibility) {
+        progBarData.setValue(visibility);
+    }
+
+    public void login(LoginModel loginModel) {
+        userRepository.loginUser(loginApiData, loginModel);
+    }
+
+    public void onLoginResponseObserved(JsonObject jsonObject) {
+        setFullNestedData(true);
+        setLoginBtnData(View.VISIBLE);
+        setProgBarData(View.GONE);
+        if (jsonObject == null) {
+            Timber.d("ZIG Error");
+            getToastData().setValue(R.string.api_failed);
+        } else {
+            Timber.d("ZIG Error %s", jsonObject.toString());
+            getToastData().setValue(R.string.api_succeed);
+        }
     }
 }

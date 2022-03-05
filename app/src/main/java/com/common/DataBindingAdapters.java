@@ -1,5 +1,7 @@
 package com.common;
 
+import android.view.View;
+
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 
@@ -24,5 +26,10 @@ public class DataBindingAdapters {
         if(errorText.getValue() != null){
             textInputEditText.requestFocus();
         }
+    }
+
+    @BindingAdapter("app:viewEnable")
+    public static void setViewEnable(View view, boolean isEnabled) {
+        view.setEnabled(isEnabled);
     }
 }

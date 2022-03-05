@@ -1,15 +1,12 @@
 package com.java.mvvmsample.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewbinding.ViewBinding;
 
 import com.common.BaseViewBindingActivity;
+import com.common.UIUtils;
 import com.common.viewmodel.CustomViewModelProvider;
 import com.java.mvvmsample.app.App;
 import com.java.mvvmsample.databinding.LoginActivityBinding;
@@ -18,7 +15,7 @@ import com.java.mvvmsample.ui.user.UserServices;
 
 public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding> {
 
-    private LoginViewModel loginViewModel;
+    private LoginViewModel viewModel;
 
     @Override
     public LoginActivityBinding inflateLayout(LayoutInflater layoutInflater) {
@@ -27,44 +24,31 @@ public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding>
 
     @Override
     public void onActivityCreate(Bundle bundle) {
-
-
-        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        UserServices userServices = ((App)getApplication()).getRetrofit().create(UserServices.class);
-        loginViewModel.setUserRepository(new UserRepository(userServices));
+        UserServices userServices = ((App) getApplication()).getRetrofit().create(UserServices.class);
+        UserRepository userRepository = new UserRepository(userServices);
+        CustomViewModelProvider viewModelProvider = new CustomViewModelProvider(userRepository);
+        viewModel = new ViewModelProvider(this, viewModelProvider).get(LoginViewModel.class);
         binding.setLifecycleOwner(this);
-        binding.setViewModel(loginViewModel);
+        binding.setViewModel(viewModel);
 
         initObservers();
         initViewClickListeners();
     }
 
     private void initObservers() {
-        loginViewModel.getUser().observe(this, loginModel -> {
-            if (loginModel != null) {
-                Log.d("DDD", "Valid data entered");
-                login(loginModel);
-            }
+        viewModel.getFormData().observe(this, loginModel -> {
+            UIUtils.hideKeyboard(getWindow());
+            viewModel.login(loginModel);
         });
 
-        loginViewModel.getLoginCallObservable().observe(this,jsonObject -> {
-            if(jsonObject == null){
-                Log.d("DDD","Error");
-            }else{
-                Log.d("DDD",jsonObject.toString());
-            }
-        });
-    }
+        viewModel.getLoginApiData().observe(this, jsonObject ->
+                viewModel.onLoginResponseObserved(jsonObject));
 
-    private void login(LoginModel loginModel) {
-        loginViewModel.login(loginModel);
+        viewModel.getToastData().observe(this, strResId ->
+                UIUtils.showToast(LoginActivity.this, strResId));
     }
 
     private void initViewClickListeners() {
-        binding.btnLogin.setOnClickListener(view -> {
-            loginViewModel.validateForm();
-        });
+        binding.btnLogin.setOnClickListener(view -> viewModel.performValidation());
     }
-
-
 }

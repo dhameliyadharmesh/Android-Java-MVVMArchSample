@@ -1,10 +1,6 @@
 package com.common;
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewbinding.ViewBinding;
 
 /**
  * @Authoer Dharmesh

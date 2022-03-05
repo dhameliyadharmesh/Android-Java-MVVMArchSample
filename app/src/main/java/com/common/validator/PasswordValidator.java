@@ -1,7 +1,5 @@
 package com.common.validator;
 
-import android.util.Patterns;
-
 /**
  * @Authoer Dharmesh
  * @Date 24-02-2022

@@ -1,42 +1,48 @@
 package com.common.viewmodel;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.java.mvvmsample.ui.user.UserRepository;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * @Authoer Dharmesh
+ * @Author Dharmesh
  * @Date 26-02-2022
  * <p>
  * Information
  **/
 public class CustomViewModelProvider implements ViewModelProvider.Factory {
-    private final Object[] newInstance;
-    public CustomViewModelProvider(Object... userRepository){
-        this.newInstance = userRepository;
+
+    private final Object[] mConstructorParams;
+
+    public CustomViewModelProvider(Object... constructorParams) {
+        mConstructorParams = constructorParams;
     }
 
-    @NonNull
     @Override
-    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+    public <T extends ViewModel> T create(Class<T> modelClass) {
+        if (modelClass == null) {
+            throw new IllegalArgumentException("Target ViewModel class can not be null");
+        }
         try {
-            return modelClass.getConstructor(ViewModel.class).newInstance(newInstance);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            if (mConstructorParams == null || mConstructorParams.length == 0) {
+                return modelClass.newInstance();
+            } else {
+                Class<?>[] classes = new Class<?>[mConstructorParams.length];
+                for (int i = 0; i < mConstructorParams.length; i++) {
+                    classes[i] = mConstructorParams[i].getClass();
+                }
+                return modelClass.getConstructor(classes).newInstance(mConstructorParams);
+            }
         } catch (InstantiationException e) {
             e.printStackTrace();
-            throw new RuntimeException();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
-            throw new RuntimeException();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }

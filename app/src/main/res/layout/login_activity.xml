@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.java.mvvmsample.ui.LoginViewModel" />
     </data>
 
-    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        app:viewEnable="@{viewModel.fullNestedData.booleanValue()}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -27,7 +28,7 @@
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
                 app:boxBackgroundColor="@android:color/transparent"
-                app:errorText="@{viewModel.ErrorEmailAddress}"
+                app:errorText="@{viewModel.errEmailData}"
                 app:layout_constraintBottom_toTopOf="@+id/tilPassword"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -40,8 +41,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
-                    android:text="@={viewModel.EmailAddress}"
-                    app:errorFocus="@{viewModel.ErrorEmailAddress}" />
+                    android:text="@={viewModel.strEmail}"
+                    app:errorFocus="@{viewModel.errEmailData}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -49,7 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:boxBackgroundColor="@android:color/transparent"
-                app:errorText="@{viewModel.ErrorPassword}"
+                app:errorText="@{viewModel.errPasswordData}"
                 app:layout_constraintBottom_toTopOf="@+id/btnLogin"
                 app:layout_constraintLeft_toLeftOf="@+id/tilEmail"
                 app:layout_constraintRight_toRightOf="@+id/tilEmail"
@@ -63,8 +64,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
                     android:inputType="textPassword"
-                    android:text="@={viewModel.Password}"
-                    app:errorFocus="@{viewModel.ErrorPassword}" />
+                    android:text="@={viewModel.strPassword}"
+                    app:errorFocus="@{viewModel.errPasswordData}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -73,10 +74,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/log_in"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="@{viewModel.loginBtnData.intValue()}"
+                app:layout_constraintBottom_toTopOf="@+id/pbProgress"
                 app:layout_constraintEnd_toEndOf="@+id/tilPassword"
                 app:layout_constraintStart_toStartOf="@+id/tilPassword"
                 app:layout_constraintTop_toBottomOf="@+id/tilPassword"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <ProgressBar
+                android:id="@+id/pbProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="@{viewModel.progBarData.intValue()}"
+                app:layout_constraintEnd_toEndOf="@+id/btnLogin"
+                app:layout_constraintStart_toStartOf="@+id/btnLogin"
+                app:layout_constraintTop_toBottomOf="@+id/btnLogin"
                 app:layout_constraintVertical_chainStyle="packed" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

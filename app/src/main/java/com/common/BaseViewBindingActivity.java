@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
 
 /**
- * @Authoer Dharmesh
+ * @Author Dharmesh
  * @Date 22-02-2022
  * <p>
  * Information

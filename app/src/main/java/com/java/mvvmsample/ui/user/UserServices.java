@@ -1,7 +1,6 @@
 package com.java.mvvmsample.ui.user;
 
 import com.google.gson.JsonObject;
-import com.java.mvvmsample.ui.LoginModel;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
