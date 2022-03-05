@@ -11,7 +11,6 @@
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
-        app:viewEnable="@{viewModel.fullNestedData.booleanValue()}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -27,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
+                app:viewEnable="@{viewModel.enableFormData.booleanValue()}"
                 app:boxBackgroundColor="@android:color/transparent"
                 app:errorText="@{viewModel.errEmailData}"
                 app:layout_constraintBottom_toTopOf="@+id/tilPassword"
@@ -52,6 +52,7 @@
                 app:boxBackgroundColor="@android:color/transparent"
                 app:errorText="@{viewModel.errPasswordData}"
                 app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+                app:viewEnable="@{viewModel.enableFormData.booleanValue()}"
                 app:layout_constraintLeft_toLeftOf="@+id/tilEmail"
                 app:layout_constraintRight_toRightOf="@+id/tilEmail"
                 app:layout_constraintTop_toBottomOf="@+id/tilEmail"

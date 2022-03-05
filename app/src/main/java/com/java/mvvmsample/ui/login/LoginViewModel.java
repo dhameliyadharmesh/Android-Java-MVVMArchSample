@@ -33,15 +33,11 @@ public class LoginViewModel extends BaseViewModel {
 
     // View Observables
     private MutableLiveData<Integer> loginBtnData;
-    private MutableLiveData<Boolean> fullNestedData;
+    private MutableLiveData<Boolean> enableFormData;
     private MutableLiveData<Integer> progBarData;
 
     public LoginViewModel(UserRepository userRepository) {
         this.userRepository = userRepository;
-
-        loginBtnData = new MutableLiveData<>();
-        progBarData = new MutableLiveData<>(View.GONE);
-        fullNestedData = new MutableLiveData<>(true);
     }
 
     public MutableLiveData<Integer> getErrEmailData() {
@@ -64,12 +60,12 @@ public class LoginViewModel extends BaseViewModel {
         return loginBtnData = (loginBtnData == null) ? new MutableLiveData<>() : loginBtnData;
     }
 
-    public MutableLiveData<Boolean> getFullNestedData() {
-        return fullNestedData = (fullNestedData == null) ? new MutableLiveData<>() : fullNestedData;
+    public MutableLiveData<Boolean> getEnableFormData() {
+        return enableFormData = (enableFormData == null) ? new MutableLiveData<>(true) : enableFormData;
     }
 
     public MutableLiveData<Integer> getProgBarData() {
-        return progBarData;
+        return progBarData = (progBarData == null) ? new MutableLiveData<>(View.GONE) : progBarData;
     }
 
     public void performValidation() {
@@ -88,7 +84,7 @@ public class LoginViewModel extends BaseViewModel {
                 errPasswordData.setValue(R.string.password_required);
             } else {
                 LoginModel loginModel = new LoginModel(strEmail, strPassword);
-                setFullNestedData(false);
+                setEnableFormData(false);
                 setLoginBtnData(View.GONE);
                 setProgBarData(View.VISIBLE);
                 formData.setValue(loginModel);
@@ -100,8 +96,8 @@ public class LoginViewModel extends BaseViewModel {
         loginBtnData.setValue(visibility);
     }
 
-    private void setFullNestedData(boolean isEnabled) {
-        fullNestedData.setValue(isEnabled);
+    private void setEnableFormData(boolean isEnabled) {
+        enableFormData.setValue(isEnabled);
     }
 
     private void setProgBarData(int visibility) {
@@ -113,7 +109,7 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public void onLoginResponseObserved(JsonObject jsonObject) {
-        setFullNestedData(true);
+        setEnableFormData(true);
         setLoginBtnData(View.VISIBLE);
         setProgBarData(View.GONE);
         if (jsonObject == null) {
