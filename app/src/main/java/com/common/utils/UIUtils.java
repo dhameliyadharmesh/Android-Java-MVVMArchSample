@@ -1,4 +1,4 @@
-package com.common;
+package com.common.utils;
 
 import android.content.Context;
 import android.view.Window;
@@ -31,5 +31,9 @@ public class UIUtils {
 
     public static void showToast(Context context,int strResId){
         Toast.makeText(context, strResId, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showToast(Context context,String str){
+        Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }
 }

@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import com.common.BaseViewModel;
+import com.common.retrofit.Resource;
 import com.common.validator.EmailValidator;
 import com.common.validator.PasswordValidator;
 import com.google.gson.JsonObject;
@@ -27,7 +28,7 @@ public class LoginViewModel extends BaseViewModel {
     private MutableLiveData<Integer> errEmailData;
     private MutableLiveData<Integer> errPasswordData;
 
-    private MutableLiveData<JsonObject> loginApiData;
+    private MutableLiveData<Resource<JsonObject>> loginApiData;
     private MutableLiveData<LoginModel> formData;
     private final UserRepository userRepository;
 
@@ -48,7 +49,7 @@ public class LoginViewModel extends BaseViewModel {
         return errPasswordData = (errPasswordData == null) ? new MutableLiveData<>() : errPasswordData;
     }
 
-    public MutableLiveData<JsonObject> getLoginApiData() {
+    public MutableLiveData<Resource<JsonObject>> getLoginApiData() {
         return loginApiData = (loginApiData == null) ? new MutableLiveData<>() : loginApiData;
     }
 
@@ -84,9 +85,6 @@ public class LoginViewModel extends BaseViewModel {
                 errPasswordData.setValue(R.string.password_required);
             } else {
                 LoginModel loginModel = new LoginModel(strEmail, strPassword);
-                setEnableFormData(false);
-                setLoginBtnData(View.GONE);
-                setProgBarData(View.VISIBLE);
                 formData.setValue(loginModel);
             }
         }
@@ -105,19 +103,45 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public void login(LoginModel loginModel) {
-        userRepository.loginUser(loginApiData, loginModel);
+        loginApiData.setValue(Resource.loading(null));
+//        userRepository.loginUser(loginApiData, loginModel);
+        userRepository.login(loginApiData, loginModel);
     }
 
-    public void onLoginResponseObserved(JsonObject jsonObject) {
-        setEnableFormData(true);
-        setLoginBtnData(View.VISIBLE);
-        setProgBarData(View.GONE);
-        if (jsonObject == null) {
-            Timber.d("ZIG Error");
-            getToastData().setValue(R.string.api_failed);
-        } else {
-            Timber.d("ZIG Error %s", jsonObject.toString());
-            getToastData().setValue(R.string.api_succeed);
+    public void  onLoginResponseObserved(Resource resource) {
+        switch (resource.status) {
+            case SUCCESS:
+                setEnableFormData(true);
+                setLoginBtnData(View.VISIBLE);
+                setProgBarData(View.GONE);
+                Timber.d("ZIG Error %s", resource.data.toString());
+                getToastData().setValue(R.string.api_succeed);
+                break;
+            case LOADING:
+                setEnableFormData(false);
+                setLoginBtnData(View.GONE);
+                setProgBarData(View.VISIBLE);
+                break;
+            case ERROR:
+                setEnableFormData(true);
+                setLoginBtnData(View.VISIBLE);
+                setProgBarData(View.GONE);
+                getToastData().setValue(R.string.api_failed);
+                break;
+            case NO_INTERNET_ERROR:
+                setEnableFormData(true);
+                setLoginBtnData(View.VISIBLE);
+                setProgBarData(View.GONE);
+                getToastStrData().setValue(resource.message);
+                break;
         }
+
+//        if (jsonObject == null) {
+//            Timber.d("ZIG Error");
+//            getToastData().setValue(R.string.api_failed);
+//        } else {
+//            Timber.d("ZIG Error %s", jsonObject.toString());
+//            getToastData().setValue(R.string.api_succeed);
+//        }
     }
 }

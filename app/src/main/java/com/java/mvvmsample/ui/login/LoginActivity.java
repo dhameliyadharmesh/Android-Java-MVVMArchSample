@@ -6,8 +6,9 @@ import android.view.LayoutInflater;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.common.BaseViewBindingActivity;
-import com.common.UIUtils;
+import com.common.utils.UIUtils;
 import com.common.viewmodel.CustomViewModelProvider;
+import com.java.mvvmsample.R;
 import com.java.mvvmsample.app.App;
 import com.java.mvvmsample.databinding.LoginActivityBinding;
 import com.java.mvvmsample.ui.user.UserRepository;
@@ -28,11 +29,17 @@ public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding>
         UserRepository userRepository = new UserRepository(userServices);
         CustomViewModelProvider viewModelProvider = new CustomViewModelProvider(userRepository);
         viewModel = new ViewModelProvider(this, viewModelProvider).get(LoginViewModel.class);
+        baseViewModel = viewModel;
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
 
         initObservers();
         initViewClickListeners();
+    }
+
+    @Override
+    public void onNetworkChanged(boolean isConnected) {
+//        UIUtils.showToast(LoginActivity.this, (isConnected) ? R.string.connected : R.string.disconnected);
     }
 
     private void initObservers() {
@@ -44,8 +51,6 @@ public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding>
         viewModel.getLoginApiData().observe(this, jsonObject ->
                 viewModel.onLoginResponseObserved(jsonObject));
 
-        viewModel.getToastData().observe(this, strResId ->
-                UIUtils.showToast(LoginActivity.this, strResId));
     }
 
     private void initViewClickListeners() {

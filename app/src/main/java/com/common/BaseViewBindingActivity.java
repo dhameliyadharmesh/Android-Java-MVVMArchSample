@@ -5,7 +5,12 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.viewbinding.ViewBinding;
+
+import com.common.managers.NetworkManager;
+import com.common.utils.UIUtils;
+import com.java.mvvmsample.app.App;
 
 /**
  * @Author Dharmesh
@@ -21,11 +26,33 @@ public abstract class BaseViewBindingActivity<VB extends ViewBinding> extends Ap
 
     public abstract void onActivityCreate(Bundle bundle);
 
+    public abstract void onNetworkChanged(boolean isConnected);
+
+    protected BaseViewModel baseViewModel;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = inflateLayout(LayoutInflater.from(this));
         setContentView(binding.getRoot());
         onActivityCreate(savedInstanceState);
+        initObservers();
+        initNetworkObserver();
+    }
+
+    private void initObservers() {
+        baseViewModel.getToastData().observe(this, strResId ->
+                UIUtils.showToast(BaseViewBindingActivity.this, strResId));
+
+        baseViewModel.getToastStrData().observe(this, str ->
+                UIUtils.showToast(BaseViewBindingActivity.this, str));
+    }
+
+    private void initNetworkObserver() {
+        App app = (App) getApplication();
+        NetworkManager networkManager = app.getNetworkManager();
+        MutableLiveData<Boolean> networkData = networkManager.getNetworkData();
+        networkData.observe(this, this::onNetworkChanged);
+        onNetworkChanged(networkData.getValue());
     }
 }
