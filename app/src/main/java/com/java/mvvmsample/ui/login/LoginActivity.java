@@ -8,11 +8,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.common.BaseViewBindingActivity;
 import com.common.utils.UIUtils;
 import com.common.viewmodel.CustomViewModelProvider;
-import com.java.mvvmsample.R;
 import com.java.mvvmsample.app.App;
 import com.java.mvvmsample.databinding.LoginActivityBinding;
 import com.java.mvvmsample.ui.user.UserRepository;
 import com.java.mvvmsample.ui.user.UserServices;
+
+import timber.log.Timber;
 
 public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding> {
 
@@ -25,6 +26,7 @@ public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding>
 
     @Override
     public void onActivityCreate(Bundle bundle) {
+        Timber.d("Observer onActivityCreate");
         UserServices userServices = ((App) getApplication()).getRetrofit().create(UserServices.class);
         UserRepository userRepository = new UserRepository(userServices);
         CustomViewModelProvider viewModelProvider = new CustomViewModelProvider(userRepository);
@@ -44,12 +46,36 @@ public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding>
 
     private void initObservers() {
         viewModel.getFormData().observe(this, loginModel -> {
+            if (loginModel.getContentIfNotHandled() == null) return;
             UIUtils.hideKeyboard(getWindow());
+            Timber.d("Observer fired");
             viewModel.login(loginModel);
         });
 
-        viewModel.getLoginApiData().observe(this, jsonObject ->
-                viewModel.onLoginResponseObserved(jsonObject));
+//        viewModel.getFormData().observe(this, new EventObserver(new EventHandler<LoginModel>() {
+//
+//            @Override
+//            public void onEventUnHandled(LoginModel loginModel) {
+//                if(loginModel == null) return;
+//                UIUtils.hideKeyboard(getWindow());
+//                Timber.d("Observer fired");
+//                viewModel.login(loginModel);
+//            }
+//        }));
+//
+//        viewModel.getLoginApiData().observe(this, new EventObserver(new EventHandler<Resource>() {
+//
+//            @Override
+//            public void onEventUnHandled(Resource jsonObject) {
+//                if(jsonObject == null) return;
+//                viewModel.onLoginResponseObserved(jsonObject);
+//            }
+//        }));
+
+        viewModel.getLoginApiData().observe(this, jsonObject -> {
+            if (jsonObject.getContentIfNotHandled() == null) return;
+            viewModel.onLoginResponseObserved(jsonObject.peekContent());
+        });
 
     }
 

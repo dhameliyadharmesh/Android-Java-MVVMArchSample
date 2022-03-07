@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import com.common.BaseViewModel;
+import com.common.livedata.EventData;
 import com.common.retrofit.Resource;
 import com.common.validator.EmailValidator;
 import com.common.validator.PasswordValidator;
@@ -28,8 +29,8 @@ public class LoginViewModel extends BaseViewModel {
     private MutableLiveData<Integer> errEmailData;
     private MutableLiveData<Integer> errPasswordData;
 
-    private MutableLiveData<Resource<JsonObject>> loginApiData;
-    private MutableLiveData<LoginModel> formData;
+    private MutableLiveData<EventData<Resource<JsonObject>>> loginApiData;
+    private MutableLiveData<EventData<LoginModel>> formData;
     private final UserRepository userRepository;
 
     // View Observables
@@ -49,12 +50,12 @@ public class LoginViewModel extends BaseViewModel {
         return errPasswordData = (errPasswordData == null) ? new MutableLiveData<>() : errPasswordData;
     }
 
-    public MutableLiveData<Resource<JsonObject>> getLoginApiData() {
+    public MutableLiveData<EventData<Resource<JsonObject>>> getLoginApiData() {
         return loginApiData = (loginApiData == null) ? new MutableLiveData<>() : loginApiData;
     }
 
-    public MutableLiveData<LoginModel> getFormData() {
-        return formData = (formData == null) ? new MutableLiveData<LoginModel>() : formData;
+    public MutableLiveData<EventData<LoginModel>> getFormData() {
+        return formData = (formData == null) ? new MutableLiveData<EventData<LoginModel>>() : formData;
     }
 
     public MutableLiveData<Integer> getLoginBtnData() {
@@ -85,7 +86,7 @@ public class LoginViewModel extends BaseViewModel {
                 errPasswordData.setValue(R.string.password_required);
             } else {
                 LoginModel loginModel = new LoginModel(strEmail, strPassword);
-                formData.setValue(loginModel);
+                formData.setValue(new EventData(loginModel));
             }
         }
     }
@@ -102,10 +103,10 @@ public class LoginViewModel extends BaseViewModel {
         progBarData.setValue(visibility);
     }
 
-    public void login(LoginModel loginModel) {
-        loginApiData.setValue(Resource.loading(null));
+    public void login(EventData<LoginModel> loginModel) {
+        loginApiData.setValue(new EventData(Resource.loading(null)));
 //        userRepository.loginUser(loginApiData, loginModel);
-        userRepository.login(loginApiData, loginModel);
+        userRepository.login(loginApiData, loginModel.peekContent());
     }
 
     public void  onLoginResponseObserved(Resource resource) {
@@ -115,7 +116,7 @@ public class LoginViewModel extends BaseViewModel {
                 setLoginBtnData(View.VISIBLE);
                 setProgBarData(View.GONE);
                 Timber.d("ZIG Error %s", resource.data.toString());
-                getToastData().setValue(R.string.api_succeed);
+                getToastData().setValue(new EventData<>(R.string.api_succeed));
                 break;
             case LOADING:
                 setEnableFormData(false);
@@ -126,13 +127,13 @@ public class LoginViewModel extends BaseViewModel {
                 setEnableFormData(true);
                 setLoginBtnData(View.VISIBLE);
                 setProgBarData(View.GONE);
-                getToastData().setValue(R.string.api_failed);
+                getToastData().setValue(new EventData<>(R.string.api_failed));
                 break;
             case NO_INTERNET_ERROR:
                 setEnableFormData(true);
                 setLoginBtnData(View.VISIBLE);
                 setProgBarData(View.GONE);
-                getToastStrData().setValue(resource.message);
+                getToastStrData().setValue(new EventData<>(resource.message));
                 break;
         }
 

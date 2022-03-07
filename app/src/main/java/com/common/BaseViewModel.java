@@ -3,6 +3,8 @@ package com.common;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.common.livedata.EventData;
+
 /**
  * @Authoer Dharmesh
  * @Date 24-02-2022
@@ -11,14 +13,14 @@ import androidx.lifecycle.ViewModel;
  **/
 public class BaseViewModel extends ViewModel {
 
-    private MutableLiveData<Integer> toastData;
-    private MutableLiveData<String> toastStrData;
+    private MutableLiveData<EventData<Integer>> toastData;
+    private MutableLiveData<EventData<String>> toastStrData;
 
-    public MutableLiveData<Integer> getToastData() {
+    public MutableLiveData<EventData<Integer>> getToastData() {
         return toastData = (toastData == null) ? new MutableLiveData<>() : toastData;
     }
 
-    public MutableLiveData<String> getToastStrData() {
+    public MutableLiveData<EventData<String>> getToastStrData() {
         return toastStrData = (toastStrData == null) ? new MutableLiveData<>() : toastStrData;
     }
 }

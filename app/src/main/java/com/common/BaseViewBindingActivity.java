@@ -41,11 +41,17 @@ public abstract class BaseViewBindingActivity<VB extends ViewBinding> extends Ap
     }
 
     private void initObservers() {
-        baseViewModel.getToastData().observe(this, strResId ->
-                UIUtils.showToast(BaseViewBindingActivity.this, strResId));
+        baseViewModel.getToastData().observe(this, strResId -> {
+            if (strResId.getContentIfNotHandled() == null) return;
+            UIUtils.showToast(BaseViewBindingActivity.this, strResId.peekContent());
+        });
 
-        baseViewModel.getToastStrData().observe(this, str ->
-                UIUtils.showToast(BaseViewBindingActivity.this, str));
+
+        baseViewModel.getToastStrData().observe(this, str ->{
+            if (str.getContentIfNotHandled() == null) return;
+            UIUtils.showToast(BaseViewBindingActivity.this, str.peekContent());
+        });
+
     }
 
     private void initNetworkObserver() {
