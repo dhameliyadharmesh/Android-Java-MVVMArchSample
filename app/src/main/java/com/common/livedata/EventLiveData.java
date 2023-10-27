@@ -16,7 +16,6 @@ import androidx.lifecycle.Observer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import timber.log.Timber;
 
 public class EventLiveData<T> extends MutableLiveData<T> {
 
@@ -28,7 +27,6 @@ public class EventLiveData<T> extends MutableLiveData<T> {
     public void observe(@NonNull LifecycleOwner owner, @NonNull final Observer<? super T> observer) {
 
         if (hasActiveObservers()) {
-            Timber.w("Multiple observers registered but only one will be notified of changes.");
         }
 
         // Observe the internal MutableLiveData

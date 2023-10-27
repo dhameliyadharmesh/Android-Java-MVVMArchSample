@@ -13,7 +13,6 @@ import com.google.gson.JsonObject;
 import com.java.mvvmsample.R;
 import com.java.mvvmsample.ui.user.UserRepository;
 
-import timber.log.Timber;
 
 /**
  * @Authoer Dharmesh
@@ -115,7 +114,6 @@ public class LoginViewModel extends BaseViewModel {
                 setEnableFormData(true);
                 setLoginBtnData(View.VISIBLE);
                 setProgBarData(View.GONE);
-                Timber.d("ZIG Error %s", resource.data.toString());
                 getToastData().setValue(new EventData<>(R.string.api_succeed));
                 break;
             case LOADING:
@@ -136,13 +134,5 @@ public class LoginViewModel extends BaseViewModel {
                 getToastStrData().setValue(new EventData<>(resource.message));
                 break;
         }
-
-//        if (jsonObject == null) {
-//            Timber.d("ZIG Error");
-//            getToastData().setValue(R.string.api_failed);
-//        } else {
-//            Timber.d("ZIG Error %s", jsonObject.toString());
-//            getToastData().setValue(R.string.api_succeed);
-//        }
     }
 }

@@ -35,14 +35,6 @@ public class UserRepository {
         call.enqueue(new Callback<T>() {
             @Override
             public void onResponse(@NonNull Call<T> call, @NonNull Response<T> response) {
-//                Timber.d("ZIG Response Code %s", response.code());
-//                Timber.d("ZIG Response Success %s", response.isSuccessful());
-//                Timber.d("ZIG Response Message %s", response.message());
-//                Timber.d("ZIG Response Error Body %s", response.errorBody());
-//                Timber.d("ZIG Response Headers %s", response.headers());
-//                Timber.d("ZIG Response toString %s", response.toString());
-//                Timber.d("ZIG Response RAW %s", response.raw());
-//                Timber.d("ZIG Response Body %s", response.body());
                 if(response.isSuccessful() && response.body() != null){
                     observable.postValue(new EventData(Resource.success(response.body())));
                 }else{

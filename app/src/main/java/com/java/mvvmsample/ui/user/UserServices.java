@@ -17,9 +17,5 @@ public interface UserServices {
 
     @FormUrlEncoded
     @POST("login.php")
-    public Call<JsonObject> loginUser(@Field("username") String username,@Field("password") String password);
-
-    @FormUrlEncoded
-    @POST("login.php")
     public Call<JsonObject> login(@Field("username") String username,@Field("password") String password);
 }

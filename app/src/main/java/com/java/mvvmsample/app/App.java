@@ -7,7 +7,6 @@ import com.common.retrofit.RetrofitClient;
 import com.java.mvvmsample.BuildConfig;
 
 import retrofit2.Retrofit;
-import timber.log.Timber;
 
 /**
  * @Authoer Dharmesh
@@ -23,9 +22,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         initNetworkManager();
-        initTimberLogging();
         initRetrofitInstance();
     }
 
@@ -33,15 +30,10 @@ public class App extends Application {
         networkManager = new NetworkManager(this);
     }
 
-    private void initTimberLogging() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
-    }
 
     private void initRetrofitInstance() {
         // Add your domain or base url here
-        retrofit = RetrofitClient.getRetrofit("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", this.getApplicationContext());
+        retrofit = RetrofitClient.getRetrofit("https://dharmeshdhameliya.com/test/", this.getApplicationContext());
     }
 
     public NetworkManager getNetworkManager() {

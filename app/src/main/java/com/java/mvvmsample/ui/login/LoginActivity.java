@@ -1,6 +1,7 @@
 package com.java.mvvmsample.ui.login;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -13,7 +14,7 @@ import com.java.mvvmsample.databinding.LoginActivityBinding;
 import com.java.mvvmsample.ui.user.UserRepository;
 import com.java.mvvmsample.ui.user.UserServices;
 
-import timber.log.Timber;
+
 
 public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding> {
 
@@ -26,7 +27,6 @@ public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding>
 
     @Override
     public void onActivityCreate(Bundle bundle) {
-        Timber.d("Observer onActivityCreate");
         UserServices userServices = ((App) getApplication()).getRetrofit().create(UserServices.class);
         UserRepository userRepository = new UserRepository(userServices);
         CustomViewModelProvider viewModelProvider = new CustomViewModelProvider(userRepository);
@@ -48,7 +48,6 @@ public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding>
         viewModel.getFormData().observe(this, loginModel -> {
             if (loginModel.getContentIfNotHandled() == null) return;
             UIUtils.hideKeyboard(getWindow());
-            Timber.d("Observer fired");
             viewModel.login(loginModel);
         });
 
@@ -58,7 +57,6 @@ public class LoginActivity extends BaseViewBindingActivity<LoginActivityBinding>
 //            public void onEventUnHandled(LoginModel loginModel) {
 //                if(loginModel == null) return;
 //                UIUtils.hideKeyboard(getWindow());
-//                Timber.d("Observer fired");
 //                viewModel.login(loginModel);
 //            }
 //        }));
