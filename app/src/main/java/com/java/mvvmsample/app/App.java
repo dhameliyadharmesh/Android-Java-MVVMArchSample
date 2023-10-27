@@ -33,7 +33,7 @@ public class App extends Application {
 
     private void initRetrofitInstance() {
         // Add your domain or base url here
-        retrofit = RetrofitClient.getRetrofit("https://dharmeshdhameliya.com/test/", this.getApplicationContext());
+        retrofit = RetrofitClient.getRetrofit("[Enter Your Domain URL here]", this.getApplicationContext());
     }
 
     public NetworkManager getNetworkManager() {
