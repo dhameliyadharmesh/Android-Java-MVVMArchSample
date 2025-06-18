@@ -14,8 +14,6 @@ This is Java-based MVVM Architecture Android Project Sample.
   <tr>
     <td><img src="screenshots/login.png" width="140" style="max-width:150px"/></td>
     <td><img src="screenshots/login-email-validation.png" width="140" style="max-width:150px"/></td>
-  </tr>
-  <tr>
     <td><img src="screenshots/login-password-validation.png" width="140" style="max-width:150px"/></td>
     <td><img src="screenshots/login-no-internet.png" width="140" style="max-width:150px"/></td>
   </tr>
