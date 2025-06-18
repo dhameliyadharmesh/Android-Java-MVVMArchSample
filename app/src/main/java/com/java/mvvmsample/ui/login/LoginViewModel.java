@@ -39,6 +39,7 @@ public class LoginViewModel extends BaseViewModel {
 
     public LoginViewModel(UserRepository userRepository) {
         this.userRepository = userRepository;
+        loginApiData = new MutableLiveData<>();
     }
 
     public MutableLiveData<Integer> getErrEmailData() {
