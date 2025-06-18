@@ -1,5 +1,5 @@
-# Android Java MVVM Architecture Sample Project
-Simple Java-based MVVM Architecture Android Project Sample.
+# JAVA MVVM SAMPLE
+This is Java-based MVVM Architecture Android Project Sample.
 
 # Architecture
 - MVVM (Model-View-ViewModel)
