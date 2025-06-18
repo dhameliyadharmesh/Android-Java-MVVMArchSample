@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.common.managers.NetworkManager;
 import com.common.retrofit.RetrofitClient;
-import com.java.mvvmsample.BuildConfig;
 
 import retrofit2.Retrofit;
 
@@ -33,7 +32,7 @@ public class App extends Application {
 
     private void initRetrofitInstance() {
         // Add your domain or base url here
-        retrofit = RetrofitClient.getRetrofit("[Enter Your Domain URL here]", this.getApplicationContext());
+        retrofit = RetrofitClient.getRetrofit("https://google.co.in", this.getApplicationContext());
     }
 
     public NetworkManager getNetworkManager() {
