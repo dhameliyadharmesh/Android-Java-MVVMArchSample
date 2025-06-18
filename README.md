@@ -10,19 +10,14 @@ This is Java-based MVVM Architecture Android Project Sample.
 # UI/UX
 - Responsive UI Pages With ConstraintLayout
 - Material Design Components
-  ![Login](screenshots/login.png)
-  ![Login - Email Validation](screenshots/login-email-validation.png)
-  ![Login - Password Validation](screenshots/login-password-validation.png)
-  ![Login - No Internet](screenshots/login-no-internet.png)
-
 <table>
   <tr>
-    <td><img src="screenshots/login.png" width="120" style="max-width:150px"/></td>
-    <td><img src="screenshots/login-email-validation.png" width="120" style="max-width:150px"/></td>
+    <td><img src="screenshots/login.png" width="140" style="max-width:150px"/></td>
+    <td><img src="screenshots/login-email-validation.png" width="140" style="max-width:150px"/></td>
   </tr>
   <tr>
-    <td><img src="screenshots/login-password-validation" width="120" style="max-width:150px"/></td>
-    <td><img src="screenshots/login-no-internet" width="120" style="max-width:150px"/></td>
+    <td><img src="screenshots/login-password-validation.png" width="140" style="max-width:150px"/></td>
+    <td><img src="screenshots/login-no-internet.png" width="140" style="max-width:150px"/></td>
   </tr>
 </table>
 
