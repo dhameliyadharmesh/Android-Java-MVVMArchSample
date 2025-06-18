@@ -11,6 +11,9 @@ This is Java-based MVVM Architecture Android Project Sample.
 - Responsive UI Pages With ConstraintLayout
 - Material Design Components
   ![Login](screenshots/login.png)
+  ![Login - Email Validation](screenshots/login-email-validation.png)
+  ![Login - Password Validation](screenshots/login-password-validation.png)
+  ![Login - No Internet](screenshots/login-no-internet.png)
 
 
 # Libraries
