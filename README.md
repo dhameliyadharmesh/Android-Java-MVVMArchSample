@@ -10,6 +10,7 @@ This is Java-based MVVM Architecture Android Project Sample.
 # UI/UX
 - Responsive UI Pages With ConstraintLayout
 - Material Design Components
+- Supports Portrait and Landscape Orientation
 <table>
   <tr>
     <td><img src="screenshots/login.png" width="140" style="max-width:150px"/></td>
@@ -19,11 +20,7 @@ This is Java-based MVVM Architecture Android Project Sample.
   </tr>
 </table>
 
-
 # Libraries
 - AndroidX
 - [Retrofit](https://github.com/square/retrofit)
 - [Scalable size unit](https://github.com/intuit/sdp)
-
-# Language
-Java
