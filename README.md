@@ -26,4 +26,4 @@ This is Java-based MVVM Architecture Android Project Sample.
 - [Scalable size unit](https://github.com/intuit/sdp)
 
 # Language
-Kotlin and Java
+Java
